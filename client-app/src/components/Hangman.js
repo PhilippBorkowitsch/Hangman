@@ -25,7 +25,7 @@ function Hangman() {
     const [codeInput, setCodeInput] = useState('');
 
     useEffect(() => {
-        let connection = new HubConnectionBuilder().withUrl('https://localhost:5001/game').build();
+        let connection = new HubConnectionBuilder().withUrl('https://hangmanio.azurewebsites.net/game').build();
 
         setHubConnection(connection);
         
@@ -37,7 +37,8 @@ function Hangman() {
                 .then(result => {
                     console.log("CONNECTED!");
 
-                    hubConnection.on('debugSendPlayerName', name => {
+                    hubConnection.on('sendPlayerName', name => {
+                        console.log(name)
                         setPlayer(name);
                     });
 

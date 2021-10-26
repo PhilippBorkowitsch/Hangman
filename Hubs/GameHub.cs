@@ -11,8 +11,7 @@ public interface IGameClient
     Task DetermineWordSetter(string player);
     Task Turn(string player);
     Task Victory(string player);
-
-    Task DebugSendPlayerName(string name);
+    Task SendPlayerName(string name);
 }
 
 public class GameHub : Hub<IGameClient>
@@ -36,7 +35,7 @@ public class GameHub : Hub<IGameClient>
 
 
         await Groups.AddToGroupAsync(Context.ConnectionId, NoGameGroup);
-        await Clients.Caller.DebugSendPlayerName(p.ConnectionId);
+        await Clients.Caller.SendPlayerName(p.ConnectionId);
         await base.OnConnectedAsync();
     }
 
