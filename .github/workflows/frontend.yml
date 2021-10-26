@@ -54,6 +54,6 @@ jobs:
         with:
           app-name: 'playhangman'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E5832E43526E423C97012CB43C42CAAF }}
           package: .
 
