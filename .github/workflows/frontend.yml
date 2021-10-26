@@ -37,9 +37,6 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./client-app
     needs: build
     environment:
       name: 'production'
@@ -55,7 +52,8 @@ jobs:
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'HangmanFrontend'
+          app-name: 'playhangman'
           slot-name: 'production'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
           package: .
+
