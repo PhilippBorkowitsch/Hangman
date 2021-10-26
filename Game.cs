@@ -105,7 +105,7 @@ public class Game
         {
             if (Word[i] == letter.ToUpper()[0]) 
             {
-                charsOfGuessedWord[i] = letter[0];
+                charsOfGuessedWord[i] = letter.ToUpper()[0];
                 letterInWord = true;
             }
         }
@@ -119,7 +119,7 @@ public class Game
     public Player GetWinner()
     {
         if (FailGuesses >= MaxFailGuesses) return Players.Find(p => p.ConnectionId == WordSetter.ConnectionId);
-        if (GuessedWord == Word) return Players.Find(p => p.ConnectionId == CurrentPlayer.ConnectionId);
+        if (GuessedWord.ToUpper() == Word.ToUpper()) return Players.Find(p => p.ConnectionId == CurrentPlayer.ConnectionId);
         
         return null;
     }

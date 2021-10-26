@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: ./HangmanAPI/client-app
+        working-directory: ./HangmanApi/client-app
 
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./HangmanAPI/client-app
+        working-directory: ./HangmanApi/client-app
     needs: build
     environment:
       name: 'production'
