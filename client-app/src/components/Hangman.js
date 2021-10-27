@@ -26,6 +26,7 @@ function Hangman() {
 
     useEffect(() => {
         let connection = new HubConnectionBuilder().withUrl('https://hangmanio.azurewebsites.net/game').build();
+        setPlayer(connection.connectionId);
 
         setHubConnection(connection);
         
@@ -36,7 +37,7 @@ function Hangman() {
             hubConnection.start()
                 .then(result => {
                     console.log("CONNECTED!");
-
+                
                     hubConnection.on('sendPlayerName', name => {
                         console.log(name)
                         setPlayer(name);
