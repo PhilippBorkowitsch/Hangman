@@ -29,10 +29,8 @@ public class GameHub : Hub<IGameClient>
 
     public override async Task OnConnectedAsync()
     {   
-        var p = new Player(){ConnectionId = Context.ConnectionId, Name = Context.ConnectionId};
+        var p = new Player{ConnectionId = Context.ConnectionId, Name = Context.ConnectionId};
         Players.Add(p);
-        foreach (Player play in Players) Console.WriteLine("IN LIST: "+ play.ConnectionId);
-
 
         await Groups.AddToGroupAsync(Context.ConnectionId, NoGameGroup);
         await Clients.Caller.SendPlayerName(p.ConnectionId);
@@ -50,7 +48,9 @@ public class GameHub : Hub<IGameClient>
 
             await Groups.RemoveFromGroupAsync(player.ConnectionId, game.Id);
             
-            if (game.PlayerCount() == 0) Games.Remove(game);
+            if (game.PlayerCount() == 0) Games.Remove(game); 
+            else await Clients.Group(game.Id).RenderGameLobby(game.GetPlayerList());
+
         } else {
             await Groups.RemoveFromGroupAsync(player.ConnectionId, NoGameGroup);
         }
