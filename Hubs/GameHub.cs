@@ -12,8 +12,8 @@ public interface IGameClient
     Task Turn(string player);
     Task Victory(string player);
     Task SendPlayerName(string name);
-
     Task SendRemainingTries(int tries);
+    Task SendGuessedLetters(string[] letters);
 }
 
 public class GameHub : Hub<IGameClient>
@@ -162,6 +162,7 @@ public class GameHub : Hub<IGameClient>
 
             await Clients.Group(game.Id).SendRemainingTries(game.GetRemainingTries());
             await Clients.Group(game.Id).Turn(game.CurrentPlayer.Name);
+            await Clients.Group(game.Id).SendGuessedLetters(game.GetGuessedLetters());
 
 
         } catch (Exception)

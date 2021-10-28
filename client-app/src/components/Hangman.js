@@ -21,7 +21,8 @@ function Hangman() {
     const [gamePlayers, setGamePlayers] = useState([]);
     const [gameStarted, setGameStarted] = useState(false);
 
-    const [guessesRemaining, setGuessesRemaining] = useState(7)
+    const [guessesRemaining, setGuessesRemaining] = useState(7);
+    const [guessedLetters, setGuessedLetters] = useState([]);
 
 
     const [codeInput, setCodeInput] = useState('');
@@ -71,6 +72,10 @@ function Hangman() {
                         setGuessesRemaining(tries);
                     })
 
+                    hubConnection.on('sendGuessedLetters', letters => {
+                        setGuessedLetters(letters);
+                    })
+
                 }).catch(e => console.log('Connection failed: ', e));
         }
     }, [hubConnection])
@@ -87,6 +92,10 @@ function Hangman() {
     const sendWord = () => hubConnection.invoke('wordSet', wordInput, gameId).catch(err => console.error(err.toString()));
     const sendGuess = () => hubConnection.invoke('guessLetter', wordGuessInput, gameId).catch(err => console.error(err.toString()));
 
+    const sendGuessButton = () => {
+        sendGuess();
+        setWordGuessInput('');
+    }
 
     return(
         <>
@@ -97,7 +106,7 @@ function Hangman() {
 
             {gameId === '' && <Container>
                 <input value={codeInput} onInput={e => setCodeInput(e.target.value)}></input>
-                <Button variant="primary" onClick={joinGame}>Join Game</Button>
+                <Button variant="primary" disabled={codeInput === ''} onClick={joinGame}>Join Game</Button>
                 <Button variant="primary" onClick={newGame}>New Game</Button>
             </Container>}
 
@@ -118,8 +127,9 @@ function Hangman() {
                             :
                                 <div>
                                     <h1>The others are guessing: </h1>
-                                    <h2 >{word}</h2>
+                                    <h2>{word}</h2>
                                     <h2>Tries remaining: {guessesRemaining}</h2>
+                                    <h5>Guessed Letters: {guessedLetters.map(x => x + ", ")}</h5>
                                 </div>
                         
                         ) : (
@@ -130,13 +140,15 @@ function Hangman() {
                                     <>
                                         <div>Guess the Word: {word}</div>
                                         <input maxLength={1} value={wordGuessInput} onInput={e => setWordGuessInput(e.target.value)}></input>
-                                        <Button variant="primary" onClick={sendGuess} disabled={wordGuessInput.length < 1}>Submit</Button>
+                                        <Button variant="primary" onClick={sendGuessButton} disabled={wordGuessInput.length < 1}>Submit</Button>
                                         <h2>Tries remaining: {guessesRemaining}</h2>
+                                        <h5>Guessed Letters: {guessedLetters.map(x => x + ", ")}</h5>
                                     </>
                                 :
                                     <>
                                         <div>Other Player is guessing the Word: {word}</div>
                                         <h2>Tries remaining: {guessesRemaining}</h2>
+                                        <h5>Guessed Letters: {guessedLetters.map(x => x + ", ")}</h5>
                                     </>
                             )
                     :

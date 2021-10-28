@@ -12,6 +12,7 @@ public class Game
     public string Word {get; private set;}
     public string GuessedWord;
     private int FailGuesses;
+    private List<string> GuessedLetters;
 
 
     private List<Player> Players;
@@ -26,6 +27,7 @@ public class Game
         FailGuesses = 0;
         GameStarted = false;
         Players = new List<Player>();
+        GuessedLetters = new List<string>();
     }
 
     public void AddPlayer(Player player)
@@ -98,6 +100,10 @@ public class Game
     {
         if (letter.Length > 1) throw new Exception("Cannot guess letter: Multiple letters detected");
 
+        if (GuessedLetters.Contains(letter.ToUpper())) throw new Exception("Letter already guessed!");
+
+        GuessedLetters.Add(letter.ToUpper());
+
         char[] charsOfGuessedWord = GuessedWord.ToCharArray();
         bool letterInWord = false;
 
@@ -138,6 +144,11 @@ public class Game
     public int GetRemainingTries()
     {
         return MaxFailGuesses - FailGuesses;
+    }
+
+    public string[] GetGuessedLetters()
+    {
+        return GuessedLetters.ToArray();
     }
 
 }
