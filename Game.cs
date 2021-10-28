@@ -135,6 +135,11 @@ public class Game
         }
     }
 
+    public int GetRemainingTries()
+    {
+        return MaxFailGuesses - FailGuesses;
+    }
+
 }
 
 public class Player

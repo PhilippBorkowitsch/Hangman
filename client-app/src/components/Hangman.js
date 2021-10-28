@@ -21,26 +21,23 @@ function Hangman() {
     const [gamePlayers, setGamePlayers] = useState([]);
     const [gameStarted, setGameStarted] = useState(false);
 
+    const [guessesRemaining, setGuessesRemaining] = useState(7)
+
 
     const [codeInput, setCodeInput] = useState('');
 
     useEffect(() => {
-        let connection = new HubConnectionBuilder().withUrl('https://hangmanio.azurewebsites.net/game').build();
-        
-
+        let connection = new HubConnectionBuilder().withUrl(process.env.REACT_APP_API_ENDPOINT).build();
         setHubConnection(connection);
-        
     }, [])
 
     useEffect(() => {
         if (hubConnection) {
             hubConnection.start()
-                .then(result => {
-                    console.log("CONNECTED!");
+                .then(result => {                  
                     setPlayer(hubConnection.connectionId);
-                
+        
                     hubConnection.on('sendPlayerName', name => {
-                        console.log(name)
                         setPlayer(name);
                     });
 
@@ -68,6 +65,10 @@ function Hangman() {
 
                     hubConnection.on('victory', player => {
                         setWinner(player);
+                    })
+
+                    hubConnection.on('sendRemainingTries', tries => {
+                        setGuessesRemaining(tries);
                     })
 
                 }).catch(e => console.log('Connection failed: ', e));
@@ -100,9 +101,10 @@ function Hangman() {
                 <Button variant="primary" onClick={newGame}>New Game</Button>
             </Container>}
 
-            {gameId !== '' && <Container>
+            {gameId !== '' && 
+            <Container>
                 <h4>Current Players:</h4>
-                <ul>{gamePlayers.map(name => <li>{name}</li>)}</ul>
+                <ul>{gamePlayers.map(name => <li key={name}>{name}</li>)}</ul>
                 {!gameStarted? 
                     (<Button disabled={gamePlayers.length < 2} onClick={startGame}>Start Game</Button>) : 
                     winner === '' ?
@@ -116,7 +118,8 @@ function Hangman() {
                             :
                                 <div>
                                     <h1>The others are guessing: </h1>
-                                    <h2>{word}</h2>
+                                    <h2 >{word}</h2>
+                                    <h2>Tries remaining: {guessesRemaining}</h2>
                                 </div>
                         
                         ) : (
@@ -127,10 +130,14 @@ function Hangman() {
                                     <>
                                         <div>Guess the Word: {word}</div>
                                         <input maxLength={1} value={wordGuessInput} onInput={e => setWordGuessInput(e.target.value)}></input>
-                                        <Button variant="primary" onClick={sendGuess}>Submit</Button>
+                                        <Button variant="primary" onClick={sendGuess} disabled={wordGuessInput.length < 1}>Submit</Button>
+                                        <h2>Tries remaining: {guessesRemaining}</h2>
                                     </>
-                                : 
-                                    <div>Other Player is guessing the Word: {word}</div>
+                                :
+                                    <>
+                                        <div>Other Player is guessing the Word: {word}</div>
+                                        <h2>Tries remaining: {guessesRemaining}</h2>
+                                    </>
                             )
                     :
                             player !== '' && player === winner ?
@@ -138,7 +145,6 @@ function Hangman() {
                             :
                                 <h2>THE OTHERS BESTED YOU :(</h2>
                 }
-                
             </Container>}
 
         </>

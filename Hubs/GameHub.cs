@@ -12,6 +12,8 @@ public interface IGameClient
     Task Turn(string player);
     Task Victory(string player);
     Task SendPlayerName(string name);
+
+    Task SendRemainingTries(int tries);
 }
 
 public class GameHub : Hub<IGameClient>
@@ -158,6 +160,7 @@ public class GameHub : Hub<IGameClient>
 
             if (!success) game.NextPlayer();
 
+            await Clients.Group(game.Id).SendRemainingTries(game.GetRemainingTries());
             await Clients.Group(game.Id).Turn(game.CurrentPlayer.Name);
 
 

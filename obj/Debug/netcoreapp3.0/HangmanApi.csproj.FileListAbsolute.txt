@@ -19,3 +19,5 @@ C:\Users\pbork\Documents\Git\HangmanServer\HangmanApi\obj\Debug\netcoreapp3.0\Ha
 C:\Users\pbork\Documents\Git\HangmanServer\HangmanApi\obj\Debug\netcoreapp3.0\HangmanApi.RazorTargetAssemblyInfo.cache
 C:\Users\pbork\Documents\Git\HangmanServer\HangmanApi\obj\Debug\netcoreapp3.0\HangmanApi.dll
 C:\Users\pbork\Documents\Git\HangmanServer\HangmanApi\obj\Debug\netcoreapp3.0\HangmanApi.pdb
+C:\Users\pbork\Documents\Git\HangmanServer\HangmanApi\bin\Debug\netcoreapp3.0\client-app\build\asset-manifest.json
+C:\Users\pbork\Documents\Git\HangmanServer\HangmanApi\bin\Debug\netcoreapp3.0\client-app\build\manifest.json
